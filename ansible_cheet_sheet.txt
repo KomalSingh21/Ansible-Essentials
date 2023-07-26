@@ -187,7 +187,7 @@ vi install-apache-pb.yml
         state: latest
     - name: Task2 will upload custom index.html into all hosts
       copy:
-        src: /home/ec2-user/labss/index.html
+        src: /home/ec2-user/index.html
         dest: /var/www/html
     - name: Task3 will setup attributes for file
       file:
