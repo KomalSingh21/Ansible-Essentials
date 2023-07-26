@@ -231,60 +231,9 @@ ansible-playbook install-apache-pb.yml
 curl <private_ip of node1> 
 curl <private_ip of node2>
 
-Task 2: Working with Handlers and Notify
-
-#Create a playbook and the following contents:
-$ vi notify.yml
-
----
-- name: Manage httpd web service
-  hosts: all
-  become: true
-
-  tasks:
-    
-    - name: Configure web service
-      template:
-        src: web_service_config.j2
-        dest: /etc/config.conf
-      notify: Restart Web Service
-
-    - name: Start web service
-      service:
-        name: httpd
-        state: started
-        enabled: yes
-
-  handlers:
-    - name: Restart Web Service
-      service:
-        name: httpd
-        state: restarted
-
-#The notify keyword is used to trigger the handler named "Restart Web Service" if there are changes made during the configuration step. The handlers section defines the handler itself, named "Restart Web Service." It uses the service module to restart the web service.
-#When the playbook runs, if there are changes made to the web service configuration during the template task, the handler will be triggered, and the web service will be restarted.
-
-#Create your configuration template file as follows and the below contents to it
-vi web_service_config.j2
-
-# web_service configuration file
-
-# Set the server port
-port = 8080
-
-# Set the maximum number of concurrent connections
-max_connections = 100
-
-# Set the log level
-log_level = debug
-
-#Execute the playbook.
-ansible-playbook notify.yml
-
-#When the playbook runs, the template module will copy this file to the destination /etc/web_service/config.conf on the web servers. If there are any changes made to this template file, the handler named "Restart Web Service" will be triggered, leading to the web service being restarted.
 
 
-Task 3: Uninstall apache web server
+Task 2: Uninstall apache web server
 ===================================
 # With slight modification, we can change the playbook to uninstall apache (self exercise)
 cp install-apache-pb.yml uninstall-apache-pb.yml
@@ -385,59 +334,6 @@ ansible all -a "sudo cat /home/cloudthat/ansible/hello.txt"
 ansible all -a "sudo ls -l /home/cloudthat/ansible/"
 
 ========================================================
-
-Task 2: Using Dynamic Inventory 
-#Create a python script and add the following contents:
-
-$ vi dynamic.py 
-
-#!/usr/bin/env python
-import boto3
-import json
-
-# Initialize the AWS SDK
-session = boto3.Session()
-
-# Specify the AWS region
-region = 'us-east-2'
-
-# Create an EC2 client
-ec2_client = session.client('ec2', region_name=region)
-
-# Get the list of instances
-response = ec2_client.describe_instances()
-
-# Create an empty inventory dictionary
-inventory = {'all': {'hosts': []}, '_meta': {'hostvars': {}}}
-
-# Process the EC2 instances
-for reservation in response['Reservations']:
-    for instance in reservation['Instances']:
-        # Get the instance details
-        instance_id = instance['InstanceId']
-        private_ip = instance['PrivateIpAddress']
-        public_ip = instance['PublicIpAddress']
-
-        # Add the instance to the inventory
-        inventory['all']['hosts'].append(instance_id)
-
-        # Add the host variables
-        inventory['_meta']['hostvars'][instance_id] = {
-            'ansible_host': public_ip if public_ip else private_ip
-        }
-
-# Output the inventory as JSON
-print(json.dumps(inventory))
-
-#Make the script executable: 
-$ chmod +x dynamic.py 
-
-#To list all the dynamic inventory hosts, you can run:
-$ ansible-inventory -i dynamic.py --list
-
-#In this example, we use a Python script to generate the dynamic inventory. The script utilizes the AWS SDK (boto3) to communicate with AWS and fetch the list of EC2 instances.
-#The script retrieves the instance details such as Instance ID, Private IP, and Public IP. It then creates an inventory dictionary with 'all' and '_meta' groups.
-#The 'all' group contains a 'hosts' list that includes all the instance IDs. The '_meta' group contains 'hostvars' where individual host variables are defined. In this case, we set the 'ansible_host' variable to the Public IP if available, otherwise the Private IP.
 
 
 ###########################################################################################
@@ -578,40 +474,6 @@ $ ansible-playbook implement-vars.yml
 # It should show the original page with msg "This is the Selected Home Page"
 
 ==============================================================================
-Task 4 : Host Scope Variables
-==============================================================================
-
-#Create the playbook 
-
-$ vi hostplaybook.yml
-
-#Open playbook.yml and add the following content:
----
-- name: Host Variable Example Playbook
-  hosts: web_servers
-  gather_facts: false
-  tasks:
-    - name: Print host-specific variable
-      debug:
-        var: my_variable
-
-#In this playbook, we have a single task that prints the value of the my_variable variable. We've set the playbook to run on the web_servers group.
-
-#Define host-specific variables.
-#In the inventory file, you can define host-specific variables by adding them as key-value pairs under each host entry. Modify as follows:
-
-$ sudo vi /etc/ansible/hosts
-
-[web_servers]
-webserver1 ansible_host=192.168.1.10 my_variable=WebServer1_Variable_Value
-webserver2 ansible_host=192.168.1.11 my_variable=WebServer2_Variable_Value
-
-#Run the playbook
-#To execute the playbook, navigate to the project directory and run the following command:
-ansible-playbook playbook.yml
-
-#Ansible will run the playbook on the hosts defined in the web_servers group. The debug task will print the value of the my_variable variable specific to each host.
-
 
 ############################################################################################
 Lab 6 :Task Inclusion
@@ -981,34 +843,6 @@ $ ansible-playbook blklab.yml
 #Notice that the tasks under rescue are not running as block tasks ran successfully.
 
 ==================================================================================================
-Task 7: Delegate Function
-===================================================================================================
-
-#Create and Open delegate.yml and add the following content:
-
----
-- name: Ansible playbook delegate_to example
-  hosts: webserver1
-  tasks:
-    - name: Check the website status
-      uri:
-        url: https://www.cloudthat.com
-        method: GET
-      delegate_to: 127.0.0.1
-      register: http_output
-    - name: tasks to get the variable output
-      debug: var=http_output
-
-#In this playbook, we have two tasks. The first task runs a simple echo command on the delegate host (localhost 127.0.0.1) using the command module. We use the delegate_to parameter to specify the delegate host. The output of the command is captured in the result variable using the register keyword. The second task prints the stdout of the command using the debug module.
-	
-
-#Run the playbook
-#To execute the playbook, navigate to the project directory and run the following command:
-
-ansible-playbook delegate.yml
-
-#The task is being delegated to the localhost (127.0.0.1) that is the controller node.
-#Once you use the delegate_to, by default, the facts gathered by any delegated tasks are assigned to the inventory_hostName (the current Host) instead of the host which produced the facts (the delegated tasks servers).
 
 
 #######################################################################################
