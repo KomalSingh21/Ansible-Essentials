@@ -187,7 +187,7 @@ vi install-apache-pb.yml
         state: latest
     - name: Task2 will upload custom index.html into all hosts
       copy:
-        src: /home/ec2-user/index.html
+        src: /home/ec2-user/ansible-labs/index.html
         dest: /var/www/html
     - name: Task3 will setup attributes for file
       file:
@@ -342,7 +342,7 @@ Lab 5: Implementing Ansible Variables
 
 Task 1: Configuring packages in ansible using variables
 ============================================================
-cd ~/labs/ 
+cd ~/ansible-labs/ 
 mkdir file && cd file
 
 vi implement-vars.yml
@@ -359,7 +359,7 @@ vi implement-vars.yml
     hostname: all
     package1: httpd
     destination: /var/www/html/index.html 
-    source: /home/ec2-user/lab/index.html
+    source: /home/ec2-user/ansible-labs/index.html
   tasks:
     - name: Install defined package
       yum:
