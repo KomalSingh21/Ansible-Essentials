@@ -596,8 +596,6 @@ $ ansible-playbook --ask-vault-pass implement-vault.yml
 #Now edit the playbook, add the below line to it and save the playbook
 $ ansible-vault edit implement-vault.yml
 
-# Change the mode at the last line
-$ vi implement-vault.yml
 
 # change last line as below
 
