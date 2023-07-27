@@ -567,6 +567,16 @@ $ vi implement-vault.yml
 # Add the given content, by pressing "INSERT" 
 
 ---
+- hosts: all
+
+  tasks:
+     - file:
+         path: /home/ec2-user/ansible-labs/index.html
+         state: touch
+         owner: ec2-user
+         group: ec2-user
+         mode: 0644
+
 	
 # save the file using "ESCAPE + :wq!"
 
