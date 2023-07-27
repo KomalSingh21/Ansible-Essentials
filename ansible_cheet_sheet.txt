@@ -359,7 +359,7 @@ vi implement-vars.yml
     hostname: all
     package1: httpd
     destination: /var/www/html/index.html 
-    source: /home/ec2-user/ansible-labs/index.html
+    source: /home/ec2-user/ansible-labs/file/index.html
   tasks:
     - name: Install defined package
       yum:
@@ -377,7 +377,7 @@ vi implement-vars.yml
 
 # save the file using "ESCAPE + :wq!"
 
-# create index.html in /home/ec2-user/labs/
+# create index.html in /home/ec2-user/ansible-labs/file
 
 vi index.html
 
@@ -399,9 +399,9 @@ $ ansible-playbook implement-vars.yml
 =============================================================================
 Task 2 : Create an alternate index_new.html file
 =============================================================================
-# create index1.html in ~/labs/
 
-cd /home/ec2-user/labs/
+
+cd /home/ec2-user/ansible-labs/file
 
 vi index1.html
 
@@ -434,7 +434,7 @@ add the folowing in the myvariables.yml file.
 hostname: all
 package1: httpd
 destination: /var/www/html/index.html
-source: /home/ec2-user/lab/index.html
+source: /home/ec2-user/ansible-labs/file/index.html
 ...
 
 # save the file using "ESCAPE + :wq!"
@@ -561,7 +561,7 @@ $ ansible all -m command -a "yum list wget curl" -b
 Lab 7: Implementing Ansible Vault
 ###########################################################################################
 
-$ cd labs
+$ cd ~
 $ vi implement-vault.yml
 
 # Add the given content, by pressing "INSERT" 
@@ -571,7 +571,7 @@ $ vi implement-vault.yml
 
   tasks:
      - file:
-         path: /home/ec2-user/ansible-labs/index.html
+         path: /home/ec2-user/demo.txt
          state: touch
          owner: ec2-user
          group: ec2-user
