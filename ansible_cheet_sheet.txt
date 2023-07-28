@@ -513,14 +513,14 @@ vi first.yml
       state: present
 
   - name: inclue task for httpd installation
-    include_tasks: second.yaml
+    include_tasks: second.yml
   
 
 # save the file using "ESCAPE + :wq!"
 
 # Execute the playbook named first.yaml using below command
 
-$ ansible-playbook first.yaml
+$ ansible-playbook first.yml
 
 ------------------------------------------------------------------------------------------
 # Create another playbook named third.yaml as below
@@ -547,9 +547,9 @@ vi third.yml
     when: out.rc == 0
 
 ----------------------------------------------------------------------------------
-# Execute the playbook third.yaml
+# Execute the playbook third.yml
 
-$ ansible-playbook third.yaml
+$ ansible-playbook third.yml
 
 # verify the installed packages on managed node by following commands#
 
@@ -667,12 +667,12 @@ vi tagslabs.yml
   connection: ssh
   gather_facts: no
   tasks:
-    - name: Install telnet
-      yum: pkg=telnet state=latest
+    - name: Install nginx
+      yum: pkg=nginx state=latest
       tags:
         - packages
-    - name: Verifying telnet installation
-      raw: yum list installed | grep telnet > /home/ec2-user/pkg.log
+    - name: Verifying nginx installation
+      raw: yum list installed | grep nginx > /home/ec2-user/pkg.log
       tags:
         - logging
 
@@ -704,8 +704,8 @@ $ vi promptlab.yml
   connection: ssh
   vars_prompt:
     - name: pkginstall
-      prompt: Which package do you want to install?
-      default: telnet
+      prompt: Which web package do you want to install?
+      default: nginx
       private: no
   tasks:
     - name: Install the package specified
@@ -715,7 +715,7 @@ $ vi promptlab.yml
 #save the file using "ESCAPE + :wq!"
 
 #Execute the playbook & you will be prompt for enter the package name which you want to install
-#If no package is mentioned, telnet is installed by default
+#If no package is mentioned, nginx is installed by default
 
 $ ansible-playbook promptlab.yml
 
