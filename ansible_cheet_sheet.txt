@@ -937,7 +937,7 @@ $ ansible-playbook /home/ec2-user/ansible-labs/uninstall-apache-pb.yml (Please p
 $ sudo yum install tree -y
 
 # You can view your home directory structure in tree format with below command tree 
-$ tree /home/ec2-user/labs
+$ tree /home/ec2-user/ansible-labs
 
 # Lets create the code for Role labs
 $ cd ~/
