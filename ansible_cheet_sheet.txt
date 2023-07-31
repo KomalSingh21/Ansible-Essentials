@@ -917,13 +917,12 @@ cd ~/
 $ sudo yum install tree -y
 
 # You can view your home directory structure in tree format with below command tree 
-$ tree /home/ec2-user/ansible-labs
+$ tree /home/ec2-user/
 
 # Lets create the code for Role labs
 $ cd ~/
-$ mkdir role-labs && cd role-labs
+$ mkdir roles && cd roles
 
-mkdir role-labs;cd role-labs
 
 
 #Now inside the roles directory, create two different directories for different roles, namely webrole and dbrole. Then switch to the directory dbrole and then create tasks directory inside dbrole
@@ -983,7 +982,7 @@ $ vi main.yml
 
 - name: uploading default index.html for host
   copy:
-     src: /home/ec2-user/role-labs/webrole/files/index.html
+     src: /home/ec2-user/roles/webrole/files/index.html
      dest: /var/www/html
 
 - name: Setting up attributes for file
@@ -1027,8 +1026,7 @@ $ vi implement-roles.yml
 #Execute the playbook
 $ ansible-playbook implement_roles.yml
 
-# Check the home page on browser. (Public DNS)
-# It will show the webpage with msg "We are performing the Roles Lab"
+# curl <managednodeIP>
 
 ==========================================================================================
 Task 2: Installing Java through Ansible Galaxy Roles galaxy
@@ -1039,9 +1037,7 @@ Task 2: Installing Java through Ansible Galaxy Roles galaxy
 #Now Install the role 'geerlingguy.java' from ansible galaxy repository. 
 $ ansible-galaxy install geerlingguy.java
 
-#Now change into labs directory by running below command and create YAML file
 
-$ cd /home/ec2-user/labs/
 
 $ vi implement-java.yml
 
