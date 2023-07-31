@@ -867,10 +867,11 @@ $ vi new-motd.j2
 
 #Put the below content into the newly created template file
 
-System information is as below 
-Operatingsystem: ‘{{ ansible_os_family }}’ 
-Architecture: ‘{{ ansible_architecture }}’ 
-DistributionVersion: ‘{{ ansible_distribution }}’
+System Information:
+Operating System: {{ ansible_os_family | default('N/A') }}
+Architecture: {{ ansible_architecture | default('N/A') }}
+Distribution Version: {{ ansible_distribution | default('N/A') }}
+
 
 #Now create the playbook for implementing this jinja2 template that we created
 
@@ -881,27 +882,27 @@ $ vi implement-jinja2.yml
 ---
 - name: playbook
   hosts: all
-  gather_facts: false
+  gather_facts: true
 
   tasks:
     - name: Render template
       template:
-        src: new-motd.j2 
-        dest: /etc/motd 
-        owner: ec2-user 
-        group: ec2-user 
+        src: new-motd.j2
+        dest: /etc/motd
+        owner: ec2-user
+        group: ec2-user
         mode: 0644
 
 #Now execute the playbook 
 
-$ ansible-playbook implement-jinja2.yml
+$ ansible-playbook implement-jinja2.yml -b 
 
  
 
 #Now we will check what our template is exactly doing, where it is putting the values.
 #For that, do the following:
 
-$ ssh ec2-user@< managed_node_ip >
+$ ansible all -m shell -a "cat /etc/motd"
 
 ############################################################################################
 Lab 10: Implementing Ansible Roles
