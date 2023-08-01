@@ -1095,17 +1095,17 @@ $ vi implementing-jinja2.yml
   hosts: all
   gather_facts: false
   vars:
-    environment: "prod"
-    servers:
-      - name: Server 1
-        ip: 172.31.13.48
-      - name: Server 2
-        ip: 172.31.15.4
+    environment: 'prod'
+    servers:
+      - name: Server 1
+        ip: 172.31.13.48
+      - name: Server 2
+        ip: 172.31.15.4
   tasks:
-    - name: Render template
-      template:
-        src: template.j2
-        dest: /tmp/output.txt
+    - name: Render template
+      template:
+        src: template.j2
+        dest: /tmp/output.txt
 
 
 #In this playbook, we have defined some variables (environment and servers) at the playbook level. 
@@ -1131,5 +1131,56 @@ ansible all -m shell -a "cat /tmp/output.txt"
 which includes the conditional greeting based on the environment variable and the list of servers with their names and IP addresses.
 
 
+-----------------------------------------------------------------------------------
 
+---
+- name: Example Playbook
+  hosts: all
+  tasks:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Start Apache
+      service:
+        name: apache2
+        state: started
+
+Each level of the playbook (play, tasks, modules, and their respective arguments) is indented with two spaces. 
+This indentation is crucial in YAML and defines the hierarchical structure of the playbook.
+For example, the tasks are indented under the tasks keyword, and the module arguments (name, apt, service, state, etc.) are indented under their respective tasks.
+-----------------------------------------------------------------------------------------------------------------------
+
+---
+- name: Example Playbook with Conditional
+  hosts: all
+  tasks:
+    - name: Install Apache on Debian
+      apt:
+        name: apache2
+        state: present
+      when: ansible_distribution == 'Debian'
+
+    - name: Install Apache on Red Hat
+      yum:
+        name: httpd
+        state: present
+      when: ansible_distribution == 'RedHat'
+
+--------------------------------------------------------------------------------------------------------------------
+---
+- name: Example Playbook with Error Handling
+  hosts: all
+  tasks:
+    - name: Copy config file
+      copy:
+        src: /path/to/config.conf
+        dest: /etc/config.conf
+      ignore_errors: yes
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
 
