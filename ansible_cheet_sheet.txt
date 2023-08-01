@@ -1155,6 +1155,7 @@ For example, the tasks are indented under the tasks keyword, and the module argu
 ---
 - name: Example Playbook with Conditional
   hosts: all
+  become : yes
   tasks:
     - name: Install Apache on Debian
       apt:
