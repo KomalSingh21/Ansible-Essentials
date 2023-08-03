@@ -300,7 +300,7 @@ vi putfile.yml
 # if you use '|' then the new line characters will be retained.
 
 # we can execute it step by step
-ansible-playbook putfile.yml --step
+ansible-playbook putfile.yml 
 
 # check if the lines are added in hello.txt
 ansible all -a "sudo cat /home/cloudthat/ansible/hello.txt"
