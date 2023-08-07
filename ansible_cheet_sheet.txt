@@ -767,7 +767,7 @@ $ vi rolab.yml
 $ ansible-playbook rolab.yml
 
 #Verify if the file exists and has the right contents on either of the client machines(manage nodes)
-$ ansible  -a "cat /home/ec2-user/uptime"
+$ ansible all -a "cat /home/ec2-user/uptime"
 
 #now open the file and edit parameter as run_once: false 
 # Execute the playbook again
