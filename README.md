@@ -643,7 +643,7 @@ ansible all -m command -a "yum list wget curl" -b
 
 ## Lab 7: Implementing Ansible Vault
 ```
-cd ~/ansible-labs/
+cd ~/ansible-labs/file
 ```
 Now using the vault utility, encrypt the playbook that we created. Give the passwd of your choice
 ```
