@@ -1014,36 +1014,11 @@ Lets create the code for Role labs
 cd ~/
 ```
 ```
-mkdir role-labs && cd role-labs
+mkdir roles && cd roles
 ```
 
-Now inside the roles directory, create two different directories for different roles, namely webrole and dbrole. Then switch to the directory dbrole and then create tasks directory inside dbrole
+Now inside the roles directory, create a different directory for roles, namely webrole. 
 ```
-mkdir webrole dbrole && cd dbrole
-```
-```
-mkdir tasks
-```
-
-This main.yml is the playbook which will get executed to make an effect of this role and put the below content in the main.yml file
-```
-vi tasks/main.yml
-```
-```
----
-- name: Install MariaDB server package
-  yum: 
-    name: mariadb-server 
-    state: present
-- name: Start MariaDB Service
-  service: 
-    name: mariadb 
-    state: started 
-    enabled: true
-```
-**save the file using** `ESCAPE + :wq!`
-
-
 Now change your directory to webrole 
 ```
 cd .. && cd webrole/
@@ -1082,7 +1057,7 @@ Add the given content, by pressing "INSERT"
 
 - name: uploading default index.html for host
   copy:
-     src: /home/ec2-user/role-labs/webrole/files/index.html
+     src: /home/ec2-user/roles/webrole/files/index.html
      dest: /var/www/html
 
 - name: Setting up attributes for file
@@ -1123,7 +1098,6 @@ Add the given content, by pressing "INSERT".
 
    roles:
      - webrole
-     - dbrole
 ```   
 **save the file using** `ESCAPE + :wq!`
 
